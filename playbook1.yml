@@ -1,0 +1,46 @@
+- name: DevOps coursework playbook
+  hosts: localhost
+  user: ubuntu
+  become: yes
+
+  tasks:
+
+  - name: Update apt
+    apt:
+      upgrade: yes
+      update_cache: yes
+
+  - name: Install apt-transport-https
+    apt:
+      update_cache: yes
+      name: apt-transport-https
+
+  - name: Adds apt key
+    apt_key:
+      url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+      state: present
+
+  - name: Append source
+    ansible.builtin.command: echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list 
+
+  - name: Update apt
+    apt:
+      upgrade: yes
+      update_cache: yes
+
+  - name: Install kubectl
+    ansible.builtin.command: sudo snap install kubectl --classic
+
+  - name: Retrieve minikube
+    uri:
+      url: 'https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
+      method: GET
+      dest: minikube
+      follow_redirects: safe
+    register: result
+
+  - name: Make minikube executable
+    ansible.builtin.command: chmod +x minikube
+
+  - name: Move minikube
+    ansible.builtin.command: sudo mv minikube /usr/local/bin/
