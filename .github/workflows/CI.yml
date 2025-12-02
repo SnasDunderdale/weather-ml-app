@@ -27,7 +27,7 @@ jobs:
         run: python -m unittest tests.unit_test
 
       - name: Run integration tests
-        run: python -m unittes tests.integration_test
+        run: python -m unittest tests.integration_test
 
       - name: Run smoke tests
         run: python -m unittest tests.smoke_test
