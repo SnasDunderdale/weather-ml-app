@@ -3,6 +3,7 @@ name: CI Pipeline
 on:
   push:
     branches: [main]   # (a) Detects changes to the GitHub Repository
+  workflow_dispatch:
 
 jobs:
   build-test-push:
