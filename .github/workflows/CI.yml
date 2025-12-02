@@ -23,13 +23,13 @@ jobs:
 
       # (c) Run test files
       - name: Run unit tests
-        run: python tests/unit_test.py
+        run: python -m unittest tests/unit_test.py
 
       - name: Run integration tests
-        run: python tests/integration_test.py
+        run: python -m unittest tests/integration_test.py
 
       - name: Run smoke tests
-        run: python tests/smoke_test.py
+        run: python -m unittest tests/smoke_test.py
 
       # (d) Build Docker image
       - name: Log in to DockerHub
