@@ -1,0 +1,17 @@
+- name: DevOps coursework playbook
+  hosts: localhost
+  user: ubuntu
+
+  tasks:
+
+  - name: Start minikube
+    ansible.builtin.command: minikube start
+
+  - name: Deploy docker image
+    ansible.builtin.command: kubectl create deployment weather-ml-app --image=angostura/weather-ml-app
+
+  - name: Create service
+    ansible.builtin.command: kubectl expose deployment/weather-ml-app --type="NodePort" --port 8080 --name node-port-service
+
+  - name: Scale deployment
+    ansible.builtin.command: kubectl scale deployments/weather-ml-app --replicas=4
