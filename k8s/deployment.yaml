@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: weather-ml-app
-          image: angostura/weather-ml-app:v2
+          image: angostura/weather-ml-app:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
