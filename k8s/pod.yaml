@@ -10,3 +10,4 @@ spec:
       image: weather-ml-app:latest   
       ports:
         - containerPort: 5000
+  serviceAccountName: weather-service
