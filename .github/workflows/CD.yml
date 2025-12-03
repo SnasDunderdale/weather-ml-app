@@ -14,36 +14,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      
       - name: Install kubectl
         run: |
           sudo apt-get update
           sudo apt-get install -y kubectl
 
-      
       - name: Install Minikube
         run: |
           curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
           sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
-      
       - name: Start Minikube
         run: |
           minikube start --driver=docker
           minikube status
-
       
-      - name: Configure kubectl
-        run: |
-          mkdir -p $HOME/.kube
-          cp $HOME/.kube/config $HOME/.kube/config.bak
-
-      # (g) Deploy to Kubernetes
+        # (g) Deploy to Kubernetes
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/deployment.yaml --validate=false
           kubectl apply -f k8s/service.yaml --validate=false
-          kubectl rollout status deployment/weather-ml-app
 
       - name: Check pod status
         run: kubectl get pods -o wide
@@ -52,5 +42,6 @@ jobs:
         run: |
           POD_NAME=$(kubectl get pods -l app=weather-ml-app -o jsonpath="{.items[0].metadata.name}")
           kubectl logs $POD_NAME
+
 
 
