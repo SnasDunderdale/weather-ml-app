@@ -14,31 +14,34 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      
       - name: Install kubectl
         run: |
           sudo apt-get update
           sudo apt-get install -y kubectl
+
+      
+      - name: Install Minikube
+        run: |
+          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+          sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+      
+      - name: Start Minikube
+        run: |
+          minikube start --driver=docker
+          minikube status
+
+      
+      - name: Set kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          cp $HOME/.minikube/profiles/minikube/config.json $HOME/.kube/config
 
       # (g) Deploy to Kubernetes
-      - name: Install kubectl
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y kubectl
-
-      
-      - name: Install Kind
-        run: |
-          curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64
-          chmod +x ./kind
-          sudo mv ./kind /usr/local/bin/kind
-
-      
-      - name: Create Kind cluster
-        run: kind create cluster --name weather-ci
-
-      
-      - name: Deploy to Kind
+      - name: Deploy to Minikube
         run: |
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
           kubectl rollout status deployment/weather-ml-app
+
