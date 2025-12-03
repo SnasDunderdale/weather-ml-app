@@ -20,12 +20,24 @@ jobs:
           sudo apt-get install -y kubectl
 
       # (g) Deploy to Kubernetes
-      - name: Set up kubeconfig
+      - name: Install kubectl
         run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > $HOME/.kube/config
+          sudo apt-get update
+          sudo apt-get install -y kubectl
 
-      - name: Apply Kubernetes manifests
+      
+      - name: Install Kind
+        run: |
+          curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64
+          chmod +x ./kind
+          sudo mv ./kind /usr/local/bin/kind
+
+      
+      - name: Create Kind cluster
+        run: kind create cluster --name weather-ci
+
+      
+      - name: Deploy to Kind
         run: |
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
