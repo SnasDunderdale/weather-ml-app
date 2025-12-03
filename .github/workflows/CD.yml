@@ -36,7 +36,7 @@ jobs:
       - name: Configure kubectl
         run: |
           mkdir -p $HOME/.kube
-          minikube kubeconfig > $HOME/.kube/config
+          cp $HOME/.kube/config $HOME/.kube/config.bak
 
       # (g) Deploy to Kubernetes
       - name: Deploy to Kubernetes
