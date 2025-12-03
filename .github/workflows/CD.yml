@@ -45,4 +45,12 @@ jobs:
           kubectl apply -f k8s/service.yaml --validate=false
           kubectl rollout status deployment/weather-ml-app
 
+      - name: Check pod status
+        run: kubectl get pods -o wide
+
+      - name: Show pod logs
+        run: |
+          POD_NAME=$(kubectl get pods -l app=weather-ml-app -o jsonpath="{.items[0].metadata.name}")
+          kubectl logs $POD_NAME
+
 
