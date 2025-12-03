@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: weather-ml-app-pod
+  labels:
+    app: weather-ml-app
+spec:
+  containers:
+    - name: weather-ml-app
+      image: weather-ml-app:latest   
+      ports:
+        - containerPort: 5000

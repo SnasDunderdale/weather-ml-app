@@ -33,6 +33,7 @@ jobs:
         run: |
           kubectl apply -f k8s/deployment.yaml --validate=false
           kubectl apply -f k8s/service.yaml --validate=false
+          kubectl apply -f k8s/pod.yaml --validate=false
 
       - name: Describe deployment status
         run: kubectl describe deployments
@@ -51,5 +52,3 @@ jobs:
 
           echo "Showing logs for pod: $POD_NAME"
           kubectl logs $POD_NAME
-
-
