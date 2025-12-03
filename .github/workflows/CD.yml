@@ -34,6 +34,9 @@ jobs:
           kubectl apply -f k8s/deployment.yaml --validate=false
           kubectl apply -f k8s/service.yaml --validate=false
 
+      - name: Describe deployment status
+        run: kubectl describe deployments
+
       - name: Check pod status
         run: kubectl get pods -o wide
 
