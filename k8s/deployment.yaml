@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: weather-ml-app
+  labels:
+    app: weather-ml-app
 spec:
   replicas: 2
   selector:
@@ -13,7 +15,20 @@ spec:
         app: weather-ml-app
     spec:
       containers:
-      - name: weather-ml-app
-        image: yeast6532/weather-ml-app:latest
-        ports:
-        - containerPort: 5000
+        - name: weather-ml-container
+          image: angostura/weather-ml-app:latest
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+
