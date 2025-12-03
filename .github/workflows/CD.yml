@@ -28,8 +28,7 @@ jobs:
         run: |
           minikube start --driver=docker
           minikube status
-      
-        # (g) Deploy to Kubernetes
+
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/deployment.yaml --validate=false
@@ -40,8 +39,14 @@ jobs:
 
       - name: Show pod logs
         run: |
-          POD_NAME=$(kubectl get pods -l app=weather-ml-app -o jsonpath="{.items[0].metadata.name}")
-          kubectl logs $POD_NAME
+          POD_NAME=$(kubectl get pods -l app=weather-ml-app -o jsonpath="{.items[0].metadata.name}" 2>/dev/null || true)
 
+          if [ -z "$POD_NAME" ]; then
+            echo "No pod found for app=weather-ml-app. Skipping logs."
+            exit 0
+          fi
+
+          echo "Showing logs for pod: $POD_NAME"
+          kubectl logs $POD_NAME
 
 
