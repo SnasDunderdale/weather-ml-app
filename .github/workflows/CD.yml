@@ -33,15 +33,16 @@ jobs:
           minikube status
 
       
-      - name: Set kubeconfig
+      - name: Configure kubectl
         run: |
           mkdir -p $HOME/.kube
-          cp $HOME/.minikube/profiles/minikube/config.json $HOME/.kube/config
+          minikube kubeconfig > $HOME/.kube/config
 
       # (g) Deploy to Kubernetes
-      - name: Deploy to Minikube
+      - name: Deploy to Kubernetes
         run: |
-          kubectl apply -f k8s/deployment.yaml
-          kubectl apply -f k8s/service.yaml
+          kubectl apply -f k8s/deployment.yaml --validate=false
+          kubectl apply -f k8s/service.yaml --validate=false
           kubectl rollout status deployment/weather-ml-app
+
 
